@@ -1,6 +1,7 @@
 import { Inbox } from 'lucide-react'
 
-export default function EmptyState({ icon: Icon = Inbox, title, message, action }) {
+export default function EmptyState({ icon, title, message, action }) {
+  const Icon = icon ?? Inbox
   return (
     <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
       <div className="mb-4 rounded-full bg-elevated p-4">

@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus, Pencil, Trash2, Search, UsersRound } from 'lucide-react'
+import { Plus, Pencil, Trash2, UsersRound } from 'lucide-react'
 import Page from '../components/layout/Page'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Modal from '../components/ui/Modal'
 import DataList from '../components/ui/DataList'
 import Pagination from '../components/ui/Pagination'
+import SearchInput from '../components/ui/SearchInput'
+import useDebounce from '../hooks/useDebounce'
 import mechanicService from '../services/mechanicService'
 
 export default function Mechanics() {
@@ -18,10 +20,11 @@ export default function Mechanics() {
   const [editing, setEditing] = useState(null) // null | 'new' | mechanic object
   const [deleting, setDeleting] = useState(null)
   const [serverError, setServerError] = useState(null)
+  const q = useDebounce(search)
 
   const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ['mechanics', page, perPage, search],
-    queryFn: () => mechanicService.list({ page, per_page: perPage, q: search || undefined }),
+    queryKey: ['mechanics', page, perPage, q],
+    queryFn: () => mechanicService.list({ page, per_page: perPage, q: q || undefined }),
     placeholderData: (prev) => prev,
   })
 
@@ -100,19 +103,14 @@ export default function Mechanics() {
       }
     >
       <div className="flex flex-col gap-4">
-        <div className="relative max-w-sm">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-subtle" />
-          <input
-            type="search"
-            value={search}
-            placeholder="Search by name or email…"
-            onChange={(e) => {
-              setSearch(e.target.value)
-              setPage(1)
-            }}
-            className="w-full rounded-xl border border-edge bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-subtle outline-none focus:border-accent"
-          />
-        </div>
+        <SearchInput
+          value={search}
+          onChange={(value) => {
+            setSearch(value)
+            setPage(1)
+          }}
+          placeholder="Search by name or email…"
+        />
 
         <DataList
           columns={columns}

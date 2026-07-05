@@ -23,6 +23,7 @@ export default function DataList({
     return (
       <Card>
         <EmptyState
+          icon={empty?.icon}
           title={empty?.title ?? 'Nothing here yet'}
           message={empty?.message}
           action={empty?.action}
