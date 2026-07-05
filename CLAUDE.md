@@ -56,6 +56,11 @@ Same component, same data/behavior, rendered as a compact, touch-friendly native
 
 Rules: all colors from theme tokens (must look right in dark/light/reading); never build a second pagination UI anywhere; API list endpoints always return Laravel paginated responses that feed this component.
 
+### 8. Compact layouts — never waste vertical space
+- Page headers are SLIM: small title with the subtitle beside it on one line, tight margins. No tall empty header bands.
+- Consistent tight padding (`p-4`); no large empty gaps between sections.
+- Desktop sidebar collapse is toggled ONLY by the hamburger (3-line) icon next to the GarageFlow logo in the header — never a collapse button inside the sidebar.
+
 ## React Architecture
 
 ```

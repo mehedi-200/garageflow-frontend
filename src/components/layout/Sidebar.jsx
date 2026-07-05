@@ -6,8 +6,6 @@ import {
   Wrench,
   FileText,
   UsersRound,
-  PanelLeftClose,
-  PanelLeftOpen,
 } from 'lucide-react'
 import cn from '../../utils/cn'
 import useAuth from '../../hooks/useAuth'
@@ -22,8 +20,11 @@ export const NAV_ITEMS = [
 
 const ADMIN_ITEMS = [{ to: '/mechanics', label: 'Mechanics', icon: UsersRound }]
 
-/* Desktop-only thin collapsible sidebar (CLAUDE.md UI rule 3). */
-export default function Sidebar({ collapsed, onToggle }) {
+/*
+ * Desktop-only thin collapsible sidebar (CLAUDE.md UI rule 3).
+ * Collapse is toggled by the hamburger next to the logo in the Header.
+ */
+export default function Sidebar({ collapsed }) {
   const { isAdmin } = useAuth()
   const items = isAdmin ? [...NAV_ITEMS, ...ADMIN_ITEMS] : NAV_ITEMS
 
@@ -56,22 +57,6 @@ export default function Sidebar({ collapsed, onToggle }) {
           </NavLink>
         ))}
       </nav>
-
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        className="m-2 flex items-center justify-center gap-2 rounded-xl p-2.5 text-subtle transition-colors hover:bg-elevated hover:text-ink"
-      >
-        {collapsed ? (
-          <PanelLeftOpen className="h-5 w-5" />
-        ) : (
-          <>
-            <PanelLeftClose className="h-5 w-5" />
-            <span className="text-sm">Collapse</span>
-          </>
-        )}
-      </button>
     </aside>
   )
 }

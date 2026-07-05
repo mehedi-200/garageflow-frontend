@@ -9,7 +9,7 @@ export default function Page({ title, subtitle, back = false, actions, children 
   return (
     <>
       <MobileTopBar title={title} back={back} actions={actions} />
-      <div className="p-4 md:p-6">
+      <div className="p-4">
         <div className="hidden md:block">
           <PageHeader title={title} subtitle={subtitle} actions={actions} />
         </div>
