@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { User, FileText, LogOut, Palette, Check, ChevronRight } from 'lucide-react'
+import { User, FileText, UsersRound, LogOut, Palette, Check, ChevronRight } from 'lucide-react'
 import Page from '../components/layout/Page'
 import Card from '../components/ui/Card'
 import useTheme from '../hooks/useTheme'
@@ -10,11 +10,14 @@ import cn from '../utils/cn'
 export default function More() {
   const navigate = useNavigate()
   const { theme, setTheme, themes } = useTheme()
-  const { logout } = useAuth()
+  const { logout, isAdmin } = useAuth()
 
   const links = [
     { label: 'Profile', icon: User, onClick: () => navigate('/profile') },
     { label: 'Invoices', icon: FileText, onClick: () => navigate('/invoices') },
+    ...(isAdmin
+      ? [{ label: 'Mechanics', icon: UsersRound, onClick: () => navigate('/mechanics') }]
+      : []),
   ]
 
   return (

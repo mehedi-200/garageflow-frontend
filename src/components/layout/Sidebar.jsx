@@ -5,10 +5,12 @@ import {
   Car,
   Wrench,
   FileText,
+  UsersRound,
   PanelLeftClose,
   PanelLeftOpen,
 } from 'lucide-react'
 import cn from '../../utils/cn'
+import useAuth from '../../hooks/useAuth'
 
 export const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -18,8 +20,13 @@ export const NAV_ITEMS = [
   { to: '/invoices', label: 'Invoices', icon: FileText },
 ]
 
+const ADMIN_ITEMS = [{ to: '/mechanics', label: 'Mechanics', icon: UsersRound }]
+
 /* Desktop-only thin collapsible sidebar (CLAUDE.md UI rule 3). */
 export default function Sidebar({ collapsed, onToggle }) {
+  const { isAdmin } = useAuth()
+  const items = isAdmin ? [...NAV_ITEMS, ...ADMIN_ITEMS] : NAV_ITEMS
+
   return (
     <aside
       className={cn(
@@ -28,7 +35,7 @@ export default function Sidebar({ collapsed, onToggle }) {
       )}
     >
       <nav className="flex flex-1 flex-col gap-1 p-2">
-        {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+        {items.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
             to={to}

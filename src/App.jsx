@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import AppLayout from './components/layout/AppLayout'
 import ProtectedRoute from './components/layout/ProtectedRoute'
+import RequireAdmin from './components/layout/RequireAdmin'
+import Mechanics from './pages/Mechanics'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Customers from './pages/Customers'
@@ -25,6 +27,9 @@ export default function App() {
           <Route path="jobs" element={<Jobs />} />
           <Route path="invoices" element={<Invoices />} />
           <Route path="profile" element={<Profile />} />
+          <Route element={<RequireAdmin />}>
+            <Route path="mechanics" element={<Mechanics />} />
+          </Route>
           <Route path="more" element={<More />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="*" element={<NotFound />} />

@@ -43,23 +43,23 @@
 ## Feature 1 — Authentication & Profile — `feature/authentication`
 
 ### Part 1A — API: auth endpoints
-- [ ] `users` table: add `role` (admin|mechanic), seeder for first admin
-- [ ] `POST /api/login`, `POST /api/logout` — `AuthController` → `LoginRequest` → `AuthService` → `UserResource` → `ApiResponse`
-- [ ] Role middleware (`admin` only routes)
+- [x] `users` table: add `role` (admin|mechanic), seeder for first admin
+- [x] `POST /api/login`, `POST /api/logout` — `AuthController` → `LoginRequest` → `AuthService` → `UserResource` → `ApiResponse`
+- [x] Role middleware (`admin` only routes)
 
 ### Part 1B — API: profile & mechanic accounts
-- [ ] `GET/PUT /api/profile` (`UpdateProfileRequest`, password change)
-- [ ] Admin CRUD for mechanic accounts (`StoreUserRequest`)
+- [x] `GET/PUT /api/profile` (`UpdateProfileRequest`, password change)
+- [x] Admin CRUD for mechanic accounts (`StoreUserRequest`)
 
 ### Part 1C — Frontend: auth flow
-- [ ] Login page (app-style on mobile)
-- [ ] `authService.js` + `useAuth` hook, token storage, 401 auto-logout (interceptor exists)
-- [ ] ProtectedRoute wired to real auth state
+- [x] Login page (app-style on mobile)
+- [x] `authService.js` + `useAuth` hook, token storage, 401 auto-logout (interceptor exists)
+- [x] ProtectedRoute wired to real auth state
 
 ### Part 1D — Frontend: profile & settings
-- [ ] Profile page (view/edit, password change)
-- [ ] Profile dropdown in header: profile / theme switcher / logout
-- [ ] Mechanics management page (admin only)
+- [x] Profile page (view/edit, password change)
+- [x] Profile dropdown in header: profile / theme switcher / logout
+- [x] Mechanics management page (admin only)
 
 ---
 
