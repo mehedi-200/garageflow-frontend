@@ -106,27 +106,27 @@
 ## Feature 4 — Service Jobs — `feature/service-jobs` ⭐ core
 
 ### Part 4A — API: jobs CRUD
-- [ ] Migrations: `service_jobs` (vehicle_id, mechanic_id, service_type, status, description, expected_delivery) + `service_items` (job_id, name, cost)
-- [ ] `ServiceJobController` (thin) → `ServiceJobService` → `ServiceJobResource`
-- [ ] `StoreServiceJobRequest` (vehicle, mechanic, fixed service-type list)
+- [x] Migrations: `service_jobs` (vehicle_id, mechanic_id, service_type, status, description, expected_delivery) + `service_items` (job_id, name, cost)
+- [x] `ServiceJobController` (thin) → `ServiceJobService` → `ServiceJobResource`
+- [x] `StoreServiceJobRequest` (vehicle, mechanic, fixed service-type list)
 
 ### Part 4B — API: status state machine
-- [ ] `PATCH /api/service-jobs/{id}/status` — transitions enforced in `ServiceJobService`: Pending → In Progress → Completed → Delivered only
-- [ ] Invalid transition ⇒ `sendError(422)`
-- [ ] Admin-only cancel; mechanics restricted to their own jobs (policy/middleware)
+- [x] `PATCH /api/service-jobs/{id}/status` — transitions enforced in `ServiceJobService`: Pending → In Progress → Completed → Delivered only
+- [x] Invalid transition ⇒ `sendError(422)`
+- [x] Admin-only cancel; mechanics restricted to their own jobs (policy/middleware)
 
 ### Part 4C — API: service items
-- [ ] Add/remove items while job In Progress (`StoreServiceItemRequest`)
-- [ ] Items sum exposed on `ServiceJobResource`
+- [x] Add/remove items while job In Progress (`StoreServiceItemRequest`)
+- [x] Items sum exposed on `ServiceJobResource`
 
 ### Part 4D — Frontend: jobs list
-- [ ] Jobs page: status filter chips + mechanic/date filters + search + Pagination
-- [ ] StatusChip colors per status (theme tokens)
-- [ ] "My Jobs" view for mechanics
+- [x] Jobs page: status filter chips + mechanic/date filters + search + Pagination
+- [x] StatusChip colors per status (theme tokens)
+- [x] "My Jobs" view for mechanics
 
 ### Part 4E — Frontend: create job + detail
-- [ ] Create form: vehicle select → owner auto-display, mechanic select, type, dates
-- [ ] Job detail page: info, status advance button (only valid next step shown), service items add/remove
+- [x] Create form: vehicle select → owner auto-display, mechanic select, type, dates
+- [x] Job detail page: info, status advance button (only valid next step shown), service items add/remove
 
 ---
 
