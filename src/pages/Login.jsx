@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Wrench } from 'lucide-react'
 import Card from '../components/ui/Card'
@@ -7,15 +8,22 @@ import useAuth from '../hooks/useAuth'
 
 export default function Login() {
   const { login } = useAuth()
+  const [serverError, setServerError] = useState(null)
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm()
 
-  function onSubmit() {
-    // TODO Part 1C: call authService.login() against /api/login (Sanctum).
-    login('demo-token')
+  async function onSubmit(values) {
+    setServerError(null)
+    try {
+      await login(values)
+    } catch (error) {
+      setServerError(
+        error.response?.data?.message ?? 'Unable to sign in. Please try again.'
+      )
+    }
   }
 
   return (
@@ -33,6 +41,11 @@ export default function Login() {
 
         <Card>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            {serverError && (
+              <p className="rounded-xl border border-danger/40 bg-danger/10 px-3.5 py-2.5 text-sm text-danger">
+                {serverError}
+              </p>
+            )}
             <Input
               id="email"
               type="email"
@@ -50,7 +63,7 @@ export default function Login() {
               {...register('password', { required: 'Password is required' })}
             />
             <Button type="submit" size="lg" disabled={isSubmitting} className="mt-1 w-full">
-              Sign in
+              {isSubmitting ? 'Signing in…' : 'Sign in'}
             </Button>
           </form>
         </Card>
