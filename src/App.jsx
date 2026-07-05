@@ -6,6 +6,7 @@ import Mechanics from './pages/Mechanics'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Customers from './pages/Customers'
+import CustomerDetail from './pages/CustomerDetail'
 import Vehicles from './pages/Vehicles'
 import Jobs from './pages/Jobs'
 import Invoices from './pages/Invoices'
@@ -23,6 +24,7 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="customers" element={<Customers />} />
+          <Route path="customers/:id" element={<CustomerDetail />} />
           <Route path="vehicles" element={<Vehicles />} />
           <Route path="jobs" element={<Jobs />} />
           <Route path="invoices" element={<Invoices />} />

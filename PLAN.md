@@ -66,23 +66,23 @@
 ## Feature 2 — Customers — `feature/customer-management`
 
 ### Part 2A — API
-- [ ] Migration + `Customer` model (soft deletes), factory
-- [ ] `apiResource /api/customers` — thin controller → `CustomerService` → `CustomerResource`
-- [ ] `StoreCustomerRequest` / `UpdateCustomerRequest`
-- [ ] Search (`?q=` name/phone) + paginated index
+- [x] Migration + `Customer` model (soft deletes), factory
+- [x] `apiResource /api/customers` — thin controller → `CustomerService` → `CustomerResource`
+- [x] `StoreCustomerRequest` / `UpdateCustomerRequest`
+- [x] Search (`?q=` name/phone) + paginated index
 
 ### Part 2B — Frontend: list
-- [ ] Customers page: Table on desktop / cards on mobile
-- [ ] Search box + shared Pagination
-- [ ] `customerService.js` + TanStack Query hooks (`useCustomers`)
+- [x] Customers page: Table on desktop / cards on mobile
+- [x] Search box + shared Pagination
+- [x] `customerService.js` + TanStack Query hooks (`useCustomers`)
 
 ### Part 2C — Frontend: create / edit / delete
-- [ ] Add & edit forms (React Hook Form + shared Input components, modal on desktop / full page on mobile)
-- [ ] Delete with confirm Modal (soft delete)
+- [x] Add & edit forms (React Hook Form + shared Input components, modal on desktop / full page on mobile)
+- [x] Delete with confirm Modal (soft delete)
 
 ### Part 2D — Customer detail
-- [ ] Detail page: info card + vehicles list + service history
-- [ ] API: `GET /api/customers/{id}` returns vehicles + jobs (Resource nesting)
+- [x] Detail page: info card + vehicles list + service history
+- [x] API: `GET /api/customers/{id}` returns vehicles + jobs (Resource nesting)
 
 ---
 
