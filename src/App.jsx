@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard'
 import Customers from './pages/Customers'
 import CustomerDetail from './pages/CustomerDetail'
 import Vehicles from './pages/Vehicles'
+import VehicleDetail from './pages/VehicleDetail'
 import Jobs from './pages/Jobs'
 import Invoices from './pages/Invoices'
 import Profile from './pages/Profile'
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="customers" element={<Customers />} />
           <Route path="customers/:id" element={<CustomerDetail />} />
           <Route path="vehicles" element={<Vehicles />} />
+          <Route path="vehicles/:id" element={<VehicleDetail />} />
           <Route path="jobs" element={<Jobs />} />
           <Route path="invoices" element={<Invoices />} />
           <Route path="profile" element={<Profile />} />

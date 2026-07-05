@@ -1,6 +1,6 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Phone, Mail, MapPin, Car, Wrench } from 'lucide-react'
+import { Phone, Mail, MapPin, Car, Wrench, ChevronRight } from 'lucide-react'
 import Page from '../components/layout/Page'
 import Card from '../components/ui/Card'
 import Spinner from '../components/ui/Spinner'
@@ -52,11 +52,36 @@ export default function CustomerDetail() {
 
         <Card>
           <h2 className="mb-2 text-sm font-semibold text-subtle">VEHICLES</h2>
-          <EmptyState
-            icon={Car}
-            title="No vehicles yet"
-            message="This customer's vehicles will appear here once vehicle management lands (Feature 3)."
-          />
+          {customer?.vehicles?.length ? (
+            <div className="flex flex-col">
+              {customer.vehicles.map((vehicle) => (
+                <Link
+                  key={vehicle.id}
+                  to={`/vehicles/${vehicle.id}`}
+                  className="flex min-h-12 items-center gap-3 border-b border-edge py-2.5 last:border-0"
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
+                    <Car className="h-4.5 w-4.5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-ink">
+                      {vehicle.registration_no}
+                    </p>
+                    <p className="truncate text-xs text-subtle">
+                      {vehicle.brand} {vehicle.model} · {vehicle.year}
+                    </p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-subtle" />
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              icon={Car}
+              title="No vehicles yet"
+              message="This customer has no registered vehicles."
+            />
+          )}
         </Card>
 
         <Card>
