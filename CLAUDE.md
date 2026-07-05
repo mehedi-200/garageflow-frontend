@@ -35,6 +35,9 @@ Implement with CSS variables + a theme class on the root element; persist the us
 - **Profile menu** (avatar → profile, settings, logout)
 On desktop these live in the thin header; on mobile/tablet they live in the app-style top bar / navigation per native app conventions.
 
+### 6. Always reuse components
+Before writing any new component, check `src/components/` for an existing one that fits (or can be extended with a prop). Build shared UI as reusable components — Button, Input, Select, Card, Modal, Table/ListView, StatusChip, PageHeader, EmptyState, etc. — and use them everywhere. Never copy-paste UI markup between pages; if two pages need similar UI, extract a component.
+
 ## React Architecture
 
 ```
