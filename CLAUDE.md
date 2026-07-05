@@ -62,6 +62,8 @@ Rules: all colors from theme tokens (must look right in dark/light/reading); nev
 - Desktop sidebar collapse is toggled ONLY by the hamburger (3-line) icon next to the GarageFlow logo in the header — never a collapse button inside the sidebar.
 - **Detail/view pages always have a back button** (all breakpoints, desktop included) that returns to the index page, rendered as a compact `← Title` row — never a floating standalone title.
 - **List-page search/filters live in a toolbar attached to the top of the table** (DataList's `toolbar` prop, same bordered container) — never floating above the table with a gap. Nothing is ever placed loose in a gap.
+- **List/index pages have NO desktop title band** (`bare` Page) — the sidebar already names the page. Primary actions (Add …) sit on the LEFT of the table toolbar; **search/filters are always right-aligned** (`md:ml-auto`), search bar starts from the right side.
+- One uniform small gap everywhere: `p-3` between content and header/sidebar — same size as the sidebar gap, never more.
 
 ## React Architecture
 

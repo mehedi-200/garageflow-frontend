@@ -105,7 +105,7 @@ export default function Customers() {
   return (
     <Page
       title="Customers"
-      subtitle="Manage your garage's customers"
+      bare
       actions={
         isAdmin && (
           <Button size="sm" onClick={() => openForm('new')}>
@@ -117,14 +117,23 @@ export default function Customers() {
       <div className="flex flex-col gap-3">
         <DataList
           toolbar={
-            <SearchInput
-              value={search}
-              onChange={(value) => {
-                setSearch(value)
-                setPage(1)
-              }}
-              placeholder="Search by name or phone…"
-            />
+            <>
+              {isAdmin && (
+                <Button size="sm" className="hidden md:inline-flex" onClick={() => openForm('new')}>
+                  <Plus className="h-4 w-4" /> Add Customer
+                </Button>
+              )}
+              <div className="w-full md:ml-auto md:w-72">
+                <SearchInput
+                  value={search}
+                  onChange={(value) => {
+                    setSearch(value)
+                    setPage(1)
+                  }}
+                  placeholder="Search by name or phone…"
+                />
+              </div>
+            </>
           }
           columns={columns}
           rows={customers}

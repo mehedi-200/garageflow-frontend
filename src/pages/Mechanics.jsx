@@ -95,7 +95,7 @@ export default function Mechanics() {
   return (
     <Page
       title="Mechanics"
-      subtitle="Manage your team's accounts"
+      bare
       actions={
         <Button size="sm" onClick={() => openForm('new')}>
           <Plus className="h-4 w-4" /> Add Mechanic
@@ -105,14 +105,21 @@ export default function Mechanics() {
       <div className="flex flex-col gap-3">
         <DataList
           toolbar={
-            <SearchInput
-              value={search}
-              onChange={(value) => {
-                setSearch(value)
-                setPage(1)
-              }}
-              placeholder="Search by name or email…"
-            />
+            <>
+              <Button size="sm" className="hidden md:inline-flex" onClick={() => openForm('new')}>
+                <Plus className="h-4 w-4" /> Add Mechanic
+              </Button>
+              <div className="w-full md:ml-auto md:w-72">
+                <SearchInput
+                  value={search}
+                  onChange={(value) => {
+                    setSearch(value)
+                    setPage(1)
+                  }}
+                  placeholder="Search by name or email…"
+                />
+              </div>
+            </>
           }
           columns={columns}
           rows={mechanics}

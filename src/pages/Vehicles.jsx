@@ -136,7 +136,7 @@ export default function Vehicles() {
   return (
     <Page
       title="Vehicles"
-      subtitle="Vehicle registry"
+      bare
       actions={
         isAdmin && (
           <Button size="sm" onClick={() => openForm('new')}>
@@ -149,24 +149,33 @@ export default function Vehicles() {
         <DataList
           toolbar={
             <>
-              <SearchInput
-                value={search}
-                onChange={(value) => {
-                  setSearch(value)
-                  setPage(1)
-                }}
-                placeholder="Search registration, brand, model…"
-              />
-              <div className="w-full md:w-64">
-                <Select
-                  value={customerId}
-                  onChange={(e) => {
-                    setCustomerId(e.target.value)
-                    setPage(1)
-                  }}
-                  placeholder="All customers"
-                  options={customerOptions}
-                />
+              {isAdmin && (
+                <Button size="sm" className="hidden md:inline-flex" onClick={() => openForm('new')}>
+                  <Plus className="h-4 w-4" /> Add Vehicle
+                </Button>
+              )}
+              <div className="flex w-full flex-col gap-2 md:ml-auto md:w-auto md:flex-row md:items-center">
+                <div className="md:w-56">
+                  <Select
+                    value={customerId}
+                    onChange={(e) => {
+                      setCustomerId(e.target.value)
+                      setPage(1)
+                    }}
+                    placeholder="All customers"
+                    options={customerOptions}
+                  />
+                </div>
+                <div className="md:w-72">
+                  <SearchInput
+                    value={search}
+                    onChange={(value) => {
+                      setSearch(value)
+                      setPage(1)
+                    }}
+                    placeholder="Search registration, brand, model…"
+                  />
+                </div>
               </div>
             </>
           }

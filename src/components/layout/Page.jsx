@@ -8,13 +8,13 @@ import PageHeader from '../ui/PageHeader'
  * desktop. Detail ("view") pages pass `back` (+ `backTo`) — they render a
  * back button + inline title on ALL breakpoints (CLAUDE.md rule 8).
  */
-export default function Page({ title, subtitle, back = false, backTo, actions, children }) {
+export default function Page({ title, subtitle, back = false, backTo, bare = false, actions, children }) {
   const navigate = useNavigate()
 
   return (
     <>
       <MobileTopBar title={title} back={back} backTo={backTo} actions={actions} />
-      <div className="p-4">
+      <div className="p-3">
         {back ? (
           <div className="mb-3 hidden items-center gap-2.5 md:flex">
             <button
@@ -28,7 +28,7 @@ export default function Page({ title, subtitle, back = false, backTo, actions, c
             <h1 className="text-lg font-semibold text-ink">{title}</h1>
             {actions && <div className="ml-auto flex items-center gap-2">{actions}</div>}
           </div>
-        ) : (
+        ) : bare ? null : (
           <div className="hidden md:block">
             <PageHeader title={title} subtitle={subtitle} actions={actions} />
           </div>

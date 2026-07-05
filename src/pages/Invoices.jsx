@@ -5,7 +5,7 @@ import EmptyState from '../components/ui/EmptyState'
 
 export default function Invoices() {
   return (
-    <Page title="Invoices" subtitle="Billing & payments">
+    <Page title="Invoices" bare>
       <Card>
         <EmptyState
           icon={FileText}
