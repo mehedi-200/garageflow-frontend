@@ -146,29 +146,30 @@ export default function Vehicles() {
       }
     >
       <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center">
-          <SearchInput
-            value={search}
-            onChange={(value) => {
-              setSearch(value)
-              setPage(1)
-            }}
-            placeholder="Search registration, brand, model…"
-          />
-          <div className="md:w-64">
-            <Select
-              value={customerId}
-              onChange={(e) => {
-                setCustomerId(e.target.value)
-                setPage(1)
-              }}
-              placeholder="All customers"
-              options={customerOptions}
-            />
-          </div>
-        </div>
-
         <DataList
+          toolbar={
+            <>
+              <SearchInput
+                value={search}
+                onChange={(value) => {
+                  setSearch(value)
+                  setPage(1)
+                }}
+                placeholder="Search registration, brand, model…"
+              />
+              <div className="w-full md:w-64">
+                <Select
+                  value={customerId}
+                  onChange={(e) => {
+                    setCustomerId(e.target.value)
+                    setPage(1)
+                  }}
+                  placeholder="All customers"
+                  options={customerOptions}
+                />
+              </div>
+            </>
+          }
           columns={columns}
           rows={vehicles}
           loading={isLoading}

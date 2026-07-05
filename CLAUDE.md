@@ -60,6 +60,8 @@ Rules: all colors from theme tokens (must look right in dark/light/reading); nev
 - Page headers are SLIM: small title with the subtitle beside it on one line, tight margins. No tall empty header bands.
 - Consistent tight padding (`p-4`); no large empty gaps between sections.
 - Desktop sidebar collapse is toggled ONLY by the hamburger (3-line) icon next to the GarageFlow logo in the header — never a collapse button inside the sidebar.
+- **Detail/view pages always have a back button** (all breakpoints, desktop included) that returns to the index page, rendered as a compact `← Title` row — never a floating standalone title.
+- **List-page search/filters live in a toolbar attached to the top of the table** (DataList's `toolbar` prop, same bordered container) — never floating above the table with a gap. Nothing is ever placed loose in a gap.
 
 ## React Architecture
 

@@ -102,17 +102,18 @@ export default function Mechanics() {
         </Button>
       }
     >
-      <div className="flex flex-col gap-4">
-        <SearchInput
-          value={search}
-          onChange={(value) => {
-            setSearch(value)
-            setPage(1)
-          }}
-          placeholder="Search by name or email…"
-        />
-
+      <div className="flex flex-col gap-3">
         <DataList
+          toolbar={
+            <SearchInput
+              value={search}
+              onChange={(value) => {
+                setSearch(value)
+                setPage(1)
+              }}
+              placeholder="Search by name or email…"
+            />
+          }
           columns={columns}
           rows={mechanics}
           loading={isLoading}
