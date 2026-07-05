@@ -7,10 +7,11 @@ import StatusChip from '../ui/StatusChip'
 import serviceJobService from '../../services/serviceJobService'
 
 /*
- * Reusable service-history list (customer & vehicle detail pages).
- * Pass either { customerId } or { vehicleId }.
+ * Reusable service-history list (customer & vehicle detail pages,
+ * dashboard). Pass { customerId } / { vehicleId } to let it fetch,
+ * or pass pre-loaded rows via { jobs }.
  */
-export default function JobHistoryList({ customerId, vehicleId }) {
+export default function JobHistoryList({ customerId, vehicleId, jobs: providedJobs }) {
   const { data, isLoading } = useQuery({
     queryKey: ['service-jobs', 'history', { customerId, vehicleId }],
     queryFn: () =>
@@ -19,11 +20,12 @@ export default function JobHistoryList({ customerId, vehicleId }) {
         vehicle_id: vehicleId || undefined,
         per_page: 20,
       }),
+    enabled: !providedJobs,
   })
 
-  if (isLoading) return <Spinner />
+  if (!providedJobs && isLoading) return <Spinner />
 
-  const jobs = data?.data?.data ?? []
+  const jobs = providedJobs ?? data?.data?.data ?? []
 
   if (!jobs.length) {
     return (

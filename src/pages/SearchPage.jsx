@@ -1,21 +1,25 @@
-import { Search } from 'lucide-react'
+import { useState } from 'react'
 import Page from '../components/layout/Page'
 import Card from '../components/ui/Card'
-import EmptyState from '../components/ui/EmptyState'
-import Input from '../components/ui/Input'
+import SearchInput from '../components/ui/SearchInput'
+import SearchResults from '../components/search/SearchResults'
+import useDebounce from '../hooks/useDebounce'
 
-/* Full-screen app-style search page (mobile entry point for master search). */
+/* Full-screen app-style master search (mobile entry point). */
 export default function SearchPage() {
+  const [term, setTerm] = useState('')
+  const q = useDebounce(term)
+
   return (
     <Page title="Search" back>
-      <div className="flex flex-col gap-4">
-        <Input type="search" placeholder="Search customers, vehicles, jobs…" autoFocus />
-        <Card>
-          <EmptyState
-            icon={Search}
-            title="Master search"
-            message="Grouped results across customers, vehicles and jobs arrive in Feature 7."
-          />
+      <div className="mx-auto flex max-w-2xl flex-col gap-3">
+        <SearchInput
+          value={term}
+          onChange={setTerm}
+          placeholder="Search customers, vehicles, jobs…"
+        />
+        <Card className="p-0">
+          <SearchResults q={q} />
         </Card>
       </div>
     </Page>
