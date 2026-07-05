@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Bell, User, LogOut, Palette, Check, Wrench } from 'lucide-react'
+import { Menu, Search, Bell, User, LogOut, Palette, Check, Wrench } from 'lucide-react'
 import useTheme from '../../hooks/useTheme'
 import useAuth from '../../hooks/useAuth'
 import cn from '../../utils/cn'
@@ -9,7 +9,7 @@ import cn from '../../utils/cn'
  * Desktop-only thin header (CLAUDE.md UI rules 3 & 5):
  * brand · master search bar · notification bell · profile menu.
  */
-export default function Header() {
+export default function Header({ onToggleSidebar }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
   const { theme, setTheme, themes } = useTheme()
@@ -31,6 +31,14 @@ export default function Header() {
           <Wrench className="h-4.5 w-4.5" />
         </span>
         <span className="text-base font-bold text-ink">GarageFlow</span>
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          aria-label="Toggle sidebar"
+          className="ml-1 rounded-lg p-2 text-subtle transition-colors hover:bg-elevated hover:text-ink"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
       </div>
 
       {/* Master search — wired to /api/search in Feature 7 */}
