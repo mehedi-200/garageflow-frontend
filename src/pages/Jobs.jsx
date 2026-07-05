@@ -5,7 +5,7 @@ import EmptyState from '../components/ui/EmptyState'
 
 export default function Jobs() {
   return (
-    <Page title="Service Jobs" subtitle="Track jobs from intake to delivery">
+    <Page title="Service Jobs" bare>
       <Card>
         <EmptyState
           icon={Wrench}
