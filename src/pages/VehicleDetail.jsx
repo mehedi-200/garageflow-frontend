@@ -18,14 +18,14 @@ export default function VehicleDetail() {
 
   if (isLoading) {
     return (
-      <Page title="Vehicle" back>
+      <Page title="Vehicle" back backTo="/vehicles">
         <Spinner />
       </Page>
     )
   }
 
   return (
-    <Page title={vehicle?.registration_no ?? 'Vehicle'} back>
+    <Page title={vehicle?.registration_no ?? 'Vehicle'} back backTo="/vehicles">
       <div className="flex flex-col gap-4">
         <Card>
           <div className="flex items-center gap-4">

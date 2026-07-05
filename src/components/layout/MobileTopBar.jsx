@@ -5,7 +5,7 @@ import { ArrowLeft, Search, Bell } from 'lucide-react'
  * Mobile/tablet-only app-style top bar (CLAUDE.md UI rules 2 & 5):
  * page title + back + search & notifications, native-app pattern.
  */
-export default function MobileTopBar({ title, back = false, actions }) {
+export default function MobileTopBar({ title, back = false, backTo, actions }) {
   const navigate = useNavigate()
 
   return (
@@ -13,7 +13,7 @@ export default function MobileTopBar({ title, back = false, actions }) {
       {back && (
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => (backTo ? navigate(backTo) : navigate(-1))}
           aria-label="Back"
           className="flex h-11 w-11 items-center justify-center rounded-full text-ink"
         >

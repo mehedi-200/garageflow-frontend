@@ -115,16 +115,17 @@ export default function Customers() {
       }
     >
       <div className="flex flex-col gap-3">
-        <SearchInput
-          value={search}
-          onChange={(value) => {
-            setSearch(value)
-            setPage(1)
-          }}
-          placeholder="Search by name or phone…"
-        />
-
         <DataList
+          toolbar={
+            <SearchInput
+              value={search}
+              onChange={(value) => {
+                setSearch(value)
+                setPage(1)
+              }}
+              placeholder="Search by name or phone…"
+            />
+          }
           columns={columns}
           rows={customers}
           loading={isLoading}
