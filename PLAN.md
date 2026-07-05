@@ -11,32 +11,32 @@
 ## Feature 0 — App Shell & Theme System — `feature/app-shell` (frontend)
 
 ### Part 0A — Theme engine
-- [ ] CSS variable design tokens (colors, surfaces, borders, text) in `index.css`
-- [ ] Three themes: `dark` (DEFAULT), `light`, `reading` via root class
-- [ ] `useTheme` hook + localStorage persistence
-- [ ] No hardcoded colors anywhere — tokens only
+- [x] CSS variable design tokens (colors, surfaces, borders, text) in `index.css`
+- [x] Three themes: `dark` (DEFAULT), `light`, `reading` via root class
+- [x] `useTheme` hook + localStorage persistence
+- [x] No hardcoded colors anywhere — tokens only
 
 ### Part 0B — Core component library (`src/components/`)
-- [ ] Button (variants: primary / secondary / danger / icon)
-- [ ] Input, Select, Textarea (React Hook Form compatible)
-- [ ] Card, Modal, EmptyState, Spinner, StatusChip
-- [ ] Table (desktop) / ListView cards (mobile) — one data-list component, two renders
-- [ ] **Pagination** — exact approved design: rounded bar, circular indigo refresh button, `Showing [N] entries` badge, `Show [size]` input, `‹Previous · pages (active = solid indigo square) · Next›`; compact app-style variant on mobile
+- [x] Button (variants: primary / secondary / danger / icon)
+- [x] Input, Select, Textarea (React Hook Form compatible)
+- [x] Card, Modal, EmptyState, Spinner, StatusChip
+- [x] Table (desktop) / ListView cards (mobile) — one data-list component, two renders
+- [x] **Pagination** — exact approved design: rounded bar, circular indigo refresh button, `Showing [N] entries` badge, `Show [size]` input, `‹Previous · pages (active = solid indigo square) · Next›`; compact app-style variant on mobile
 
 ### Part 0C — Desktop layout
-- [ ] Thin header: master search bar + notification bell + profile menu
-- [ ] Thin collapsible sidebar (icons-only when collapsed, state persisted)
-- [ ] Thin footer
+- [x] Thin header: master search bar + notification bell + profile menu
+- [x] Thin collapsible sidebar (icons-only when collapsed, state persisted)
+- [x] Thin footer
 
 ### Part 0D — Mobile / tablet native-app layout
-- [ ] Bottom navigation bar (Dashboard, Customers, Vehicles, Jobs, More)
-- [ ] App-style top bar per page (title + contextual actions)
-- [ ] Full-screen card-based pages, 44px touch targets
+- [x] Bottom navigation bar (Dashboard, Customers, Vehicles, Jobs, More)
+- [x] App-style top bar per page (title + contextual actions)
+- [x] Full-screen card-based pages, 44px touch targets
 
 ### Part 0E — Routing skeleton
-- [ ] React Router routes for all pages (placeholder pages)
-- [ ] `<AppLayout>` switching chrome by breakpoint
-- [ ] `<ProtectedRoute>` wrapper (redirects to /login)
+- [x] React Router routes for all pages (placeholder pages)
+- [x] `<AppLayout>` switching chrome by breakpoint
+- [x] `<ProtectedRoute>` wrapper (redirects to /login)
 
 ---
 
