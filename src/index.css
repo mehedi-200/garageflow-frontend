@@ -76,6 +76,29 @@ html, body, #root {
   height: 100%;
 }
 
+/* Print: clean invoice only — hide app chrome, force light paper */
+@media print {
+  header, aside, footer, nav,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  :root {
+    --canvas: #ffffff;
+    --surface: #ffffff;
+    --elevated: #f3f4f6;
+    --edge: #d1d5db;
+    --ink: #111827;
+    --subtle: #4b5563;
+    --accent: #4338ca;
+    --on-accent: #ffffff;
+  }
+
+  main {
+    overflow: visible !important;
+  }
+}
+
 body {
   @apply bg-canvas text-ink antialiased;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
