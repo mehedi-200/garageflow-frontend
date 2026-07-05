@@ -38,6 +38,24 @@ On desktop these live in the thin header; on mobile/tablet they live in the app-
 ### 6. Always reuse components
 Before writing any new component, check `src/components/` for an existing one that fits (or can be extended with a prop). Build shared UI as reusable components — Button, Input, Select, Card, Modal, Table/ListView, StatusChip, PageHeader, EmptyState, etc. — and use them everywhere. Never copy-paste UI markup between pages; if two pages need similar UI, extract a component.
 
+### 7. Pagination — every list page, ONE shared component, exact design
+Every page that lists data MUST use pagination, and always through the single shared `<Pagination>` component. It has exactly two responsive designs:
+
+**Desktop design (fixed — matches the approved reference):**
+A full-width rounded bar (subtle elevated surface on the page background) containing, from left to right:
+- Circular primary-accent (indigo) **refresh icon button**
+- `Showing [13] entries` — total count in a small dark rounded badge
+- *(spacer pushes the rest right)*
+- `Show [10]` — per-page size in a small rounded outlined input
+- `‹ Previous` link (accent color)
+- Page numbers: **active page = solid indigo rounded square with white number**, inactive pages = plain numbers
+- `Next ›` link (accent color)
+
+**Mobile/tablet design (app view):**
+Same component, same data/behavior, rendered as a compact, touch-friendly native-app style control (large tap targets, current page indicator, previous/next; refresh and page-size accessible but space-efficient). No desktop bar squeezed onto mobile.
+
+Rules: all colors from theme tokens (must look right in dark/light/reading); never build a second pagination UI anywhere; API list endpoints always return Laravel paginated responses that feed this component.
+
 ## React Architecture
 
 ```
