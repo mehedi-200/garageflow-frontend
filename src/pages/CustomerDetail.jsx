@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Phone, Mail, MapPin, Car, Wrench, ChevronRight } from 'lucide-react'
+import { Phone, Mail, MapPin, Car, ChevronRight } from 'lucide-react'
+import JobHistoryList from '../components/jobs/JobHistoryList'
 import Page from '../components/layout/Page'
 import Card from '../components/ui/Card'
 import Spinner from '../components/ui/Spinner'
@@ -86,11 +87,7 @@ export default function CustomerDetail() {
 
         <Card>
           <h2 className="mb-2 text-sm font-semibold text-subtle">SERVICE HISTORY</h2>
-          <EmptyState
-            icon={Wrench}
-            title="No service jobs yet"
-            message="Service history will appear here once service jobs land (Feature 4)."
-          />
+          <JobHistoryList customerId={id} />
         </Card>
       </div>
     </Page>
