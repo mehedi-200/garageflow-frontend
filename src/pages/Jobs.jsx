@@ -16,7 +16,7 @@ import StatusChip from '../components/ui/StatusChip'
 import useDebounce from '../hooks/useDebounce'
 import serviceJobService, { SERVICE_TYPES, JOB_STATUSES } from '../services/serviceJobService'
 import vehicleService from '../services/vehicleService'
-import mechanicService from '../services/mechanicService'
+import userService from '../services/userService'
 
 export default function Jobs() {
   const navigate = useNavigate()
@@ -56,14 +56,13 @@ export default function Jobs() {
     label: `${v.registration_no} — ${v.customer?.name}`,
   }))
 
-  const { data: mechanicsData } = useQuery({
-    queryKey: ['mechanics', 'options'],
-    queryFn: () => mechanicService.list({ per_page: 100 }),
+  const { data: usersData } = useQuery({
+    queryKey: ['users', 'options'],
+    queryFn: () => userService.list({ per_page: 100 }),
   })
-  const mechanicOptions = (mechanicsData?.data?.data ?? []).map((m) => ({
-    value: m.id,
-    label: m.name,
-  }))
+  const mechanicOptions = (usersData?.data?.data ?? [])
+    .filter((u) => !u.is_admin)
+    .map((u) => ({ value: u.id, label: u.name }))
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
