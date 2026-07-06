@@ -10,14 +10,12 @@ import cn from '../utils/cn'
 export default function More() {
   const navigate = useNavigate()
   const { theme, setTheme, themes } = useTheme()
-  const { logout, isAdmin } = useAuth()
+  const { logout } = useAuth()
 
   const links = [
     { label: 'Profile', icon: User, onClick: () => navigate('/profile') },
     { label: 'Invoices', icon: FileText, onClick: () => navigate('/invoices') },
-    ...(isAdmin
-      ? [{ label: 'Mechanics', icon: UsersRound, onClick: () => navigate('/mechanics') }]
-      : []),
+    { label: 'Mechanics', icon: UsersRound, onClick: () => navigate('/mechanics') },
   ]
 
   return (

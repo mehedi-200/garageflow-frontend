@@ -21,7 +21,6 @@ import Modal from '../components/ui/Modal'
 import Spinner from '../components/ui/Spinner'
 import StatusChip from '../components/ui/StatusChip'
 import EmptyState from '../components/ui/EmptyState'
-import useAuth from '../hooks/useAuth'
 import money from '../utils/money'
 import serviceJobService, { NEXT_STATUS, JOB_STATUSES } from '../services/serviceJobService'
 
@@ -34,7 +33,6 @@ const NEXT_LABEL = {
 export default function JobDetail() {
   const { id } = useParams()
   const queryClient = useQueryClient()
-  const { user, isAdmin } = useAuth()
   const [confirmCancel, setConfirmCancel] = useState(false)
   const [actionError, setActionError] = useState(null)
 
@@ -44,7 +42,6 @@ export default function JobDetail() {
   })
   const job = data?.data
 
-  const canManage = isAdmin || job?.mechanic?.id === user?.id
   const nextStatus = NEXT_STATUS[job?.status]
   const statusLabel = (s) => JOB_STATUSES.find((x) => x.value === s)?.label ?? s
 
@@ -102,12 +99,12 @@ export default function JobDetail() {
               </Button>
             </Link>
           )}
-          {canManage && nextStatus && (
+          {nextStatus && (
             <Button size="sm" onClick={() => statusMutation.mutate(nextStatus)} disabled={statusMutation.isPending}>
               {NEXT_LABEL[nextStatus]} <ArrowRight className="h-4 w-4" />
             </Button>
           )}
-          {isAdmin && job?.status !== 'delivered' && job?.status !== 'cancelled' && (
+          {job?.status !== 'delivered' && job?.status !== 'cancelled' && (
             <Button size="sm" variant="danger" onClick={() => setConfirmCancel(true)}>
               <Ban className="h-4 w-4" /> Cancel
             </Button>
@@ -197,7 +194,7 @@ export default function JobDetail() {
                 >
                   <span className="flex-1 text-ink">{item.name}</span>
                   <span className="font-medium text-ink">{money(item.cost)}</span>
-                  {canManage && job.status === 'in_progress' && (
+                  {job.status === 'in_progress' && (
                     <Button
                       variant="ghost"
                       size="icon"
@@ -222,7 +219,7 @@ export default function JobDetail() {
             />
           )}
 
-          {canManage && job?.status === 'in_progress' && (
+          {job?.status === 'in_progress' && (
             <form
               onSubmit={handleSubmit((values) => addItemMutation.mutate(values))}
               className="mt-3 flex flex-col gap-2 border-t border-edge pt-3 md:flex-row md:items-start"
