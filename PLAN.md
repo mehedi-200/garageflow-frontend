@@ -202,3 +202,21 @@
 
 ## Out of scope for v1 (planned v2 — open as GitHub issues)
 Public registration · password-reset emails · customer portal · SMS/email to customers · CSV import/export · appointment calendar · parts inventory · online payments · partial payments · tax config · real-time websockets (Reverb) · charts library · E2E tests
+
+---
+
+## Feature 10 — Roles & Permissions (RBAC) — `feature/roles-permissions`
+
+### Part 10A — API
+- [x] roles / permissions / permission_role tables; users get `is_admin` + `role_id`
+- [x] Super admin (`is_admin=1`) bypasses ALL permission checks; `garageflow:super-admin` artisan command
+- [x] `permission:` middleware gates feature route groups
+- [x] Role CRUD with permission sync (in-use roles undeletable); permissions list endpoint
+- [x] Users created with a required role; super admins protected from edit/delete
+- [x] Login/profile expose the user's permission list
+
+### Part 10B — Frontend
+- [x] `can()` in useAuth; menus (sidebar/bottom nav/More) filtered by permission
+- [x] Users page (role assigned at creation, Super Admin badge)
+- [x] Roles page with permission checkboxes
+- [x] RequirePermission route guards

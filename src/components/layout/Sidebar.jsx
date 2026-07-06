@@ -6,24 +6,29 @@ import {
   Wrench,
   FileText,
   UsersRound,
+  Shield,
 } from 'lucide-react'
 import cn from '../../utils/cn'
+import useAuth from '../../hooks/useAuth'
 
+/* permission: null = visible to everyone; super admins see everything. */
 export const NAV_ITEMS = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/customers', label: 'Customers', icon: Users },
-  { to: '/vehicles', label: 'Vehicles', icon: Car },
-  { to: '/jobs', label: 'Service Jobs', icon: Wrench },
-  { to: '/invoices', label: 'Invoices', icon: FileText },
+  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true, permission: null },
+  { to: '/customers', label: 'Customers', icon: Users, permission: 'customers' },
+  { to: '/vehicles', label: 'Vehicles', icon: Car, permission: 'vehicles' },
+  { to: '/jobs', label: 'Service Jobs', icon: Wrench, permission: 'service_jobs' },
+  { to: '/invoices', label: 'Invoices', icon: FileText, permission: 'invoices' },
+  { to: '/users', label: 'Users', icon: UsersRound, permission: 'users' },
+  { to: '/roles', label: 'Roles', icon: Shield, permission: 'roles' },
 ]
-
-const items = [...NAV_ITEMS, { to: '/mechanics', label: 'Mechanics', icon: UsersRound }]
 
 /*
  * Desktop-only thin collapsible sidebar (CLAUDE.md UI rule 3).
  * Collapse is toggled by the hamburger next to the logo in the Header.
  */
 export default function Sidebar({ collapsed }) {
+  const { can } = useAuth()
+  const items = NAV_ITEMS.filter((item) => !item.permission || can(item.permission))
 
   return (
     <aside

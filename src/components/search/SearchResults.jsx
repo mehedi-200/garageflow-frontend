@@ -29,10 +29,10 @@ export default function SearchResults({ q, onNavigate }) {
     vehicles = [],
     jobs = [],
     invoices = [],
-    mechanics = [],
+    users = [],
   } = data?.data ?? {}
   const nothing =
-    !customers.length && !vehicles.length && !jobs.length && !invoices.length && !mechanics.length
+    !customers.length && !vehicles.length && !jobs.length && !invoices.length && !users.length
 
   if (nothing) {
     return <EmptyState icon={SearchX} title="No results" message={`Nothing matched “${q}”.`} />
@@ -118,12 +118,12 @@ export default function SearchResults({ q, onNavigate }) {
           ))}
         </Group>
       )}
-      {mechanics.length > 0 && (
-        <Group label="MECHANICS">
-          {mechanics.map((m) => (
+      {users.length > 0 && (
+        <Group label="USERS">
+          {users.map((m) => (
             <Row
               key={`m${m.id}`}
-              to="/mechanics"
+              to="/users"
               icon={UsersRound}
               primary={m.name}
               secondary={m.email}

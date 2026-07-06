@@ -30,12 +30,19 @@ export default function useAuth() {
     localStorage.setItem(USER_KEY, JSON.stringify(updated))
   }
 
+  /** Super admins (is_admin) bypass every permission check. */
+  function can(permission) {
+    if (user?.is_admin) return true
+    return user?.permissions?.includes(permission) ?? false
+  }
+
   return {
     user,
     // A session is only valid with BOTH a token and a stored user —
     // stale pre-auth sessions (token without user) force a re-login.
     isAuthenticated: Boolean(localStorage.getItem(TOKEN_KEY)) && user !== null,
-    isAdmin: user?.role === 'admin',
+    isSuperAdmin: Boolean(user?.is_admin),
+    can,
     login,
     logout,
     refreshUser,

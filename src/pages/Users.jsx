@@ -1,35 +1,46 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus, Pencil, Trash2, UsersRound } from 'lucide-react'
+import { Plus, Pencil, Trash2, UsersRound, ShieldCheck } from 'lucide-react'
 import Page from '../components/layout/Page'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
+import Select from '../components/ui/Select'
 import Modal from '../components/ui/Modal'
 import DataList from '../components/ui/DataList'
 import Pagination from '../components/ui/Pagination'
 import SearchInput from '../components/ui/SearchInput'
 import useDebounce from '../hooks/useDebounce'
-import mechanicService from '../services/mechanicService'
+import userService from '../services/userService'
+import roleService from '../services/roleService'
 
-export default function Mechanics() {
+export default function Users() {
   const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [search, setSearch] = useState('')
-  const [editing, setEditing] = useState(null) // null | 'new' | mechanic object
+  const [editing, setEditing] = useState(null) // null | 'new' | user
   const [deleting, setDeleting] = useState(null)
   const [serverError, setServerError] = useState(null)
   const q = useDebounce(search)
 
   const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ['mechanics', page, perPage, q],
-    queryFn: () => mechanicService.list({ page, per_page: perPage, q: q || undefined }),
+    queryKey: ['users', page, perPage, q],
+    queryFn: () => userService.list({ page, per_page: perPage, q: q || undefined }),
     placeholderData: (prev) => prev,
   })
 
-  const mechanics = data?.data?.data ?? []
+  const users = data?.data?.data ?? []
   const meta = data?.data?.meta
+
+  const { data: rolesData } = useQuery({
+    queryKey: ['roles', 'options'],
+    queryFn: () => roleService.list({ per_page: 100 }),
+  })
+  const roleOptions = (rolesData?.data?.data ?? []).map((r) => ({
+    value: r.id,
+    label: r.name,
+  }))
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
@@ -38,20 +49,19 @@ export default function Mechanics() {
     setEditing(target)
     reset(
       target === 'new'
-        ? { name: '', email: '', password: '' }
-        : { name: target.name, email: target.email, password: '' }
+        ? { name: '', email: '', password: '', role_id: '' }
+        : { name: target.name, email: target.email, password: '', role_id: target.role?.id ?? '' }
     )
   }
 
   function invalidate() {
-    queryClient.invalidateQueries({ queryKey: ['mechanics'] })
+    queryClient.invalidateQueries({ queryKey: ['users'] })
+    queryClient.invalidateQueries({ queryKey: ['roles'] })
   }
 
   const saveMutation = useMutation({
     mutationFn: (values) =>
-      editing === 'new'
-        ? mechanicService.create(values)
-        : mechanicService.update(editing.id, values),
+      editing === 'new' ? userService.create(values) : userService.update(editing.id, values),
     onSuccess: () => {
       invalidate()
       setEditing(null)
@@ -65,49 +75,70 @@ export default function Mechanics() {
   })
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => mechanicService.remove(id),
+    mutationFn: (id) => userService.remove(id),
     onSuccess: () => {
       invalidate()
       setDeleting(null)
     },
+    onError: (error) => {
+      setDeleting(null)
+      setServerError(error.response?.data?.message)
+    },
   })
+
+  const roleBadge = (row) =>
+    row.is_admin ? (
+      <span className="inline-flex items-center gap-1 rounded-full border border-accent/40 bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent">
+        <ShieldCheck className="h-3.5 w-3.5" /> Super Admin
+      </span>
+    ) : (
+      <span className="text-ink">{row.role?.name ?? '—'}</span>
+    )
 
   const columns = [
     { key: 'name', header: 'Name' },
     { key: 'email', header: 'Email' },
+    { key: 'role', header: 'Role', render: roleBadge },
     { key: 'created_at', header: 'Added' },
     {
       key: 'actions',
       header: '',
-      render: (row) => (
-        <span className="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" aria-label="Edit" onClick={(e) => { e.stopPropagation(); openForm(row) }}>
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="Delete" onClick={(e) => { e.stopPropagation(); setDeleting(row) }}>
-            <Trash2 className="h-4 w-4 text-danger" />
-          </Button>
-        </span>
-      ),
+      render: (row) =>
+        row.is_admin ? null : (
+          <span className="flex justify-end gap-1">
+            <Button variant="ghost" size="icon" aria-label="Edit" onClick={(e) => { e.stopPropagation(); openForm(row) }}>
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" aria-label="Delete" onClick={(e) => { e.stopPropagation(); setDeleting(row) }}>
+              <Trash2 className="h-4 w-4 text-danger" />
+            </Button>
+          </span>
+        ),
     },
   ]
 
   return (
     <Page
-      title="Mechanics"
+      title="Users"
       bare
       actions={
         <Button size="sm" onClick={() => openForm('new')}>
-          <Plus className="h-4 w-4" /> Add Mechanic
+          <Plus className="h-4 w-4" /> Add User
         </Button>
       }
     >
       <div className="flex flex-col gap-3">
+        {serverError && editing === null && (
+          <p className="rounded-xl border border-danger/40 bg-danger/10 px-3.5 py-2.5 text-sm text-danger">
+            {serverError}
+          </p>
+        )}
+
         <DataList
           toolbar={
             <>
               <Button size="sm" className="hidden md:inline-flex" onClick={() => openForm('new')}>
-                <Plus className="h-4 w-4" /> Add Mechanic
+                <Plus className="h-4 w-4" /> Add User
               </Button>
               <div className="w-full md:ml-auto md:w-72">
                 <SearchInput
@@ -122,16 +153,12 @@ export default function Mechanics() {
             </>
           }
           columns={columns}
-          rows={mechanics}
+          rows={users}
           loading={isLoading}
           empty={{
-            title: 'No mechanics yet',
-            message: 'Add your first mechanic so you can assign service jobs.',
-            action: (
-              <Button onClick={() => openForm('new')}>
-                <Plus className="h-4 w-4" /> Add Mechanic
-              </Button>
-            ),
+            icon: UsersRound,
+            title: 'No users yet',
+            message: 'Add users and assign them a role to control what they can access.',
           }}
           renderCard={(row) => (
             <div className="flex items-center gap-3">
@@ -140,14 +167,20 @@ export default function Mechanics() {
               </span>
               <div className="min-w-0 flex-1">
                 <p className="truncate font-semibold text-ink">{row.name}</p>
-                <p className="truncate text-sm text-subtle">{row.email}</p>
+                <p className="truncate text-sm text-subtle">
+                  {row.is_admin ? 'Super Admin' : row.role?.name ?? '—'} · {row.email}
+                </p>
               </div>
-              <Button variant="ghost" size="icon" aria-label="Edit" onClick={() => openForm(row)}>
-                <Pencil className="h-4.5 w-4.5" />
-              </Button>
-              <Button variant="ghost" size="icon" aria-label="Delete" onClick={() => setDeleting(row)}>
-                <Trash2 className="h-4.5 w-4.5 text-danger" />
-              </Button>
+              {!row.is_admin && (
+                <>
+                  <Button variant="ghost" size="icon" aria-label="Edit" onClick={(e) => { e.stopPropagation(); openForm(row) }}>
+                    <Pencil className="h-4.5 w-4.5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" aria-label="Delete" onClick={(e) => { e.stopPropagation(); setDeleting(row) }}>
+                    <Trash2 className="h-4.5 w-4.5 text-danger" />
+                  </Button>
+                </>
+              )}
             </div>
           )}
         />
@@ -167,11 +200,11 @@ export default function Mechanics() {
         />
       </div>
 
-      {/* Create / edit */}
+      {/* Create / edit — role is assigned right at creation */}
       <Modal
         open={editing !== null}
         onClose={() => setEditing(null)}
-        title={editing === 'new' ? 'Add Mechanic' : 'Edit Mechanic'}
+        title={editing === 'new' ? 'Add User' : 'Edit User'}
       >
         <form
           onSubmit={handleSubmit((values) => saveMutation.mutate(values))}
@@ -183,20 +216,28 @@ export default function Mechanics() {
             </p>
           )}
           <Input
-            id="m-name"
+            id="u-name"
             label="Name"
             error={errors.name?.message}
             {...register('name', { required: 'Name is required' })}
           />
           <Input
-            id="m-email"
+            id="u-email"
             type="email"
             label="Email"
             error={errors.email?.message}
             {...register('email', { required: 'Email is required' })}
           />
+          <Select
+            id="u-role"
+            label="Role"
+            placeholder="Assign a role…"
+            options={roleOptions}
+            error={errors.role_id?.message}
+            {...register('role_id', { required: 'Role is required' })}
+          />
           <Input
-            id="m-password"
+            id="u-password"
             type="password"
             label={editing === 'new' ? 'Password' : 'New password (leave blank to keep)'}
             error={errors.password?.message}
@@ -220,7 +261,7 @@ export default function Mechanics() {
       <Modal
         open={deleting !== null}
         onClose={() => setDeleting(null)}
-        title="Delete Mechanic"
+        title="Delete User"
         footer={
           <>
             <Button variant="secondary" onClick={() => setDeleting(null)}>

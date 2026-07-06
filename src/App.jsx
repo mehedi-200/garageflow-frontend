@@ -1,7 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
 import AppLayout from './components/layout/AppLayout'
 import ProtectedRoute from './components/layout/ProtectedRoute'
-import Mechanics from './pages/Mechanics'
+import Users from './pages/Users'
+import Roles from './pages/Roles'
+import RequirePermission from './components/layout/RequirePermission'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Customers from './pages/Customers'
@@ -26,16 +28,29 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route index element={<Dashboard />} />
-          <Route path="customers" element={<Customers />} />
-          <Route path="customers/:id" element={<CustomerDetail />} />
-          <Route path="vehicles" element={<Vehicles />} />
-          <Route path="vehicles/:id" element={<VehicleDetail />} />
-          <Route path="jobs" element={<Jobs />} />
-          <Route path="jobs/:id" element={<JobDetail />} />
-          <Route path="invoices" element={<Invoices />} />
-          <Route path="invoices/:id" element={<InvoiceDetail />} />
+          <Route element={<RequirePermission permission="customers" />}>
+            <Route path="customers" element={<Customers />} />
+            <Route path="customers/:id" element={<CustomerDetail />} />
+          </Route>
+          <Route element={<RequirePermission permission="vehicles" />}>
+            <Route path="vehicles" element={<Vehicles />} />
+            <Route path="vehicles/:id" element={<VehicleDetail />} />
+          </Route>
+          <Route element={<RequirePermission permission="service_jobs" />}>
+            <Route path="jobs" element={<Jobs />} />
+            <Route path="jobs/:id" element={<JobDetail />} />
+          </Route>
+          <Route element={<RequirePermission permission="invoices" />}>
+            <Route path="invoices" element={<Invoices />} />
+            <Route path="invoices/:id" element={<InvoiceDetail />} />
+          </Route>
           <Route path="profile" element={<Profile />} />
-          <Route path="mechanics" element={<Mechanics />} />
+          <Route element={<RequirePermission permission="users" />}>
+            <Route path="users" element={<Users />} />
+          </Route>
+          <Route element={<RequirePermission permission="roles" />}>
+            <Route path="roles" element={<Roles />} />
+          </Route>
           <Route path="more" element={<More />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="notifications" element={<Notifications />} />
