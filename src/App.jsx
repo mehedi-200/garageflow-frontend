@@ -16,6 +16,7 @@ import InvoiceDetail from './pages/InvoiceDetail'
 import Profile from './pages/Profile'
 import More from './pages/More'
 import SearchPage from './pages/SearchPage'
+import Notifications from './pages/Notifications'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
           </Route>
           <Route path="more" element={<More />} />
           <Route path="search" element={<SearchPage />} />
+          <Route path="notifications" element={<Notifications />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Route>

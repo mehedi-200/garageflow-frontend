@@ -33,6 +33,7 @@ export default function MobileTopBar({ title, back = false, backTo, actions }) {
       <button
         type="button"
         aria-label="Notifications"
+        onClick={() => navigate('/notifications')}
         className="flex h-11 w-11 items-center justify-center rounded-full text-subtle"
       >
         <Bell className="h-5.5 w-5.5" />

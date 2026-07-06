@@ -1,28 +1,53 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { Menu, Search, Bell, User, LogOut, Palette, Check, Wrench } from 'lucide-react'
 import useTheme from '../../hooks/useTheme'
 import useAuth from '../../hooks/useAuth'
+import useDebounce from '../../hooks/useDebounce'
 import cn from '../../utils/cn'
+import SearchResults from '../search/SearchResults'
+import NotificationPanel from '../notifications/NotificationPanel'
+import notificationService from '../../services/notificationService'
+
+function useClickOutside(close) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    function onClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) close()
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    return () => document.removeEventListener('mousedown', onClickOutside)
+  }, [close])
+
+  return ref
+}
 
 /*
  * Desktop-only thin header (CLAUDE.md UI rules 3 & 5):
- * brand · master search bar · notification bell · profile menu.
+ * brand + sidebar hamburger · master search · notifications · profile.
  */
 export default function Header({ onToggleSidebar }) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const menuRef = useRef(null)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [bellOpen, setBellOpen] = useState(false)
+  const [term, setTerm] = useState('')
+  const q = useDebounce(term)
   const { theme, setTheme, themes } = useTheme()
   const { logout } = useAuth()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    function onClickOutside(e) {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false)
-    }
-    document.addEventListener('mousedown', onClickOutside)
-    return () => document.removeEventListener('mousedown', onClickOutside)
-  }, [])
+  const menuRef = useClickOutside(() => setMenuOpen(false))
+  const searchRef = useClickOutside(() => setSearchOpen(false))
+  const bellRef = useClickOutside(() => setBellOpen(false))
+
+  const { data: unreadData } = useQuery({
+    queryKey: ['notifications', 'unread'],
+    queryFn: notificationService.unreadCount,
+    refetchInterval: 30000,
+  })
+  const unread = unreadData?.data?.count ?? 0
 
   return (
     <header className="hidden h-14 shrink-0 items-center gap-4 border-b border-edge bg-surface px-4 md:flex">
@@ -41,24 +66,54 @@ export default function Header({ onToggleSidebar }) {
         </button>
       </div>
 
-      {/* Master search — wired to /api/search in Feature 7 */}
-      <div className="relative mx-auto w-full max-w-md">
+      {/* Master search with grouped results dropdown */}
+      <div className="relative mx-auto w-full max-w-md" ref={searchRef}>
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-subtle" />
         <input
           type="search"
+          value={term}
           placeholder="Search customers, vehicles, jobs…"
+          onChange={(e) => {
+            setTerm(e.target.value)
+            setSearchOpen(true)
+          }}
+          onFocus={() => term && setSearchOpen(true)}
           className="w-full rounded-xl border border-edge bg-canvas py-2 pl-9 pr-3 text-sm text-ink placeholder:text-subtle outline-none transition-colors focus:border-accent"
         />
+        {searchOpen && term && (
+          <div className="absolute inset-x-0 top-11 z-40 overflow-hidden rounded-2xl border border-edge bg-surface shadow-xl">
+            <SearchResults
+              q={q}
+              onNavigate={() => {
+                setSearchOpen(false)
+                setTerm('')
+              }}
+            />
+          </div>
+        )}
       </div>
 
-      {/* Notifications — wired to API in Feature 8 */}
-      <button
-        type="button"
-        aria-label="Notifications"
-        className="relative rounded-full p-2 text-subtle transition-colors hover:bg-elevated hover:text-ink"
-      >
-        <Bell className="h-5 w-5" />
-      </button>
+      {/* Notifications bell + panel */}
+      <div className="relative" ref={bellRef}>
+        <button
+          type="button"
+          aria-label="Notifications"
+          onClick={() => setBellOpen((o) => !o)}
+          className="relative rounded-full p-2 text-subtle transition-colors hover:bg-elevated hover:text-ink"
+        >
+          <Bell className="h-5 w-5" />
+          {unread > 0 && (
+            <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold text-on-accent">
+              {unread > 9 ? '9+' : unread}
+            </span>
+          )}
+        </button>
+        {bellOpen && (
+          <div className="absolute right-0 top-11 z-40 w-96 overflow-hidden rounded-2xl border border-edge bg-surface shadow-xl">
+            <NotificationPanel onNavigate={() => setBellOpen(false)} />
+          </div>
+        )}
+      </div>
 
       {/* Profile menu with theme switcher */}
       <div className="relative" ref={menuRef}>
