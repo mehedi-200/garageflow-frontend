@@ -12,6 +12,7 @@ import VehicleDetail from './pages/VehicleDetail'
 import Jobs from './pages/Jobs'
 import JobDetail from './pages/JobDetail'
 import Invoices from './pages/Invoices'
+import InvoiceDetail from './pages/InvoiceDetail'
 import Profile from './pages/Profile'
 import More from './pages/More'
 import SearchPage from './pages/SearchPage'
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="jobs" element={<Jobs />} />
           <Route path="jobs/:id" element={<JobDetail />} />
           <Route path="invoices" element={<Invoices />} />
+          <Route path="invoices/:id" element={<InvoiceDetail />} />
           <Route path="profile" element={<Profile />} />
           <Route element={<RequireAdmin />}>
             <Route path="mechanics" element={<Mechanics />} />

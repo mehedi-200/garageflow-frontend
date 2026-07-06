@@ -11,6 +11,7 @@ import {
   Trash2,
   ArrowRight,
   Ban,
+  FileText,
 } from 'lucide-react'
 import Page from '../components/layout/Page'
 import Card from '../components/ui/Card'
@@ -94,6 +95,13 @@ export default function JobDetail() {
       backTo="/jobs"
       actions={
         <>
+          {job?.invoice && (
+            <Link to={`/invoices/${job.invoice.id}`}>
+              <Button size="sm" variant="secondary">
+                <FileText className="h-4 w-4" /> Invoice
+              </Button>
+            </Link>
+          )}
           {canManage && nextStatus && (
             <Button size="sm" onClick={() => statusMutation.mutate(nextStatus)} disabled={statusMutation.isPending}>
               {NEXT_LABEL[nextStatus]} <ArrowRight className="h-4 w-4" />
