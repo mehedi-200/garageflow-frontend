@@ -32,7 +32,9 @@ export default function useAuth() {
 
   return {
     user,
-    isAuthenticated: Boolean(localStorage.getItem(TOKEN_KEY)),
+    // A session is only valid with BOTH a token and a stored user —
+    // stale pre-auth sessions (token without user) force a re-login.
+    isAuthenticated: Boolean(localStorage.getItem(TOKEN_KEY)) && user !== null,
     isAdmin: user?.role === 'admin',
     login,
     logout,

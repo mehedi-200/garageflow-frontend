@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Users, Car, Wrench, SearchX } from 'lucide-react'
+import { Users, Car, Wrench, FileText, UsersRound, SearchX } from 'lucide-react'
 import Spinner from '../ui/Spinner'
 import EmptyState from '../ui/EmptyState'
 import StatusChip from '../ui/StatusChip'
+import money from '../../utils/money'
 import searchService from '../../services/searchService'
 
 /*
@@ -23,8 +24,15 @@ export default function SearchResults({ q, onNavigate }) {
 
   if (isLoading) return <Spinner />
 
-  const { customers = [], vehicles = [], jobs = [] } = data?.data ?? {}
-  const nothing = !customers.length && !vehicles.length && !jobs.length
+  const {
+    customers = [],
+    vehicles = [],
+    jobs = [],
+    invoices = [],
+    mechanics = [],
+  } = data?.data ?? {}
+  const nothing =
+    !customers.length && !vehicles.length && !jobs.length && !invoices.length && !mechanics.length
 
   if (nothing) {
     return <EmptyState icon={SearchX} title="No results" message={`Nothing matched “${q}”.`} />
@@ -92,6 +100,33 @@ export default function SearchResults({ q, onNavigate }) {
               primary={`#${j.id} · ${j.service_type}`}
               secondary={j.vehicle?.registration_no}
               chip={<StatusChip status={j.status} />}
+            />
+          ))}
+        </Group>
+      )}
+      {invoices.length > 0 && (
+        <Group label="INVOICES">
+          {invoices.map((i) => (
+            <Row
+              key={`i${i.id}`}
+              to={`/invoices/${i.id}`}
+              icon={FileText}
+              primary={i.invoice_no}
+              secondary={`${i.job?.vehicle?.customer?.name ?? ''} · ${money(i.total)}`}
+              chip={<StatusChip status={i.payment_status} />}
+            />
+          ))}
+        </Group>
+      )}
+      {mechanics.length > 0 && (
+        <Group label="MECHANICS">
+          {mechanics.map((m) => (
+            <Row
+              key={`m${m.id}`}
+              to="/mechanics"
+              icon={UsersRound}
+              primary={m.name}
+              secondary={m.email}
             />
           ))}
         </Group>

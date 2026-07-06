@@ -12,13 +12,11 @@ import DataList from '../components/ui/DataList'
 import Pagination from '../components/ui/Pagination'
 import SearchInput from '../components/ui/SearchInput'
 import useDebounce from '../hooks/useDebounce'
-import useAuth from '../hooks/useAuth'
 import customerService from '../services/customerService'
 
 export default function Customers() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { isAdmin } = useAuth()
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [search, setSearch] = useState('')
@@ -82,8 +80,7 @@ export default function Customers() {
     { key: 'phone', header: 'Phone' },
     { key: 'email', header: 'Email', render: (row) => row.email ?? '—' },
     { key: 'address', header: 'Address', render: (row) => row.address ?? '—' },
-    ...(isAdmin
-      ? [
+    ...[
           {
             key: 'actions',
             header: '',
@@ -98,8 +95,7 @@ export default function Customers() {
               </span>
             ),
           },
-        ]
-      : []),
+        ],
   ]
 
   return (
@@ -107,22 +103,18 @@ export default function Customers() {
       title="Customers"
       bare
       actions={
-        isAdmin && (
-          <Button size="sm" onClick={() => openForm('new')}>
-            <Plus className="h-4 w-4" /> Add Customer
-          </Button>
-        )
+        <Button size="sm" onClick={() => openForm('new')}>
+          <Plus className="h-4 w-4" /> Add Customer
+        </Button>
       }
     >
       <div className="flex flex-col gap-3">
         <DataList
           toolbar={
             <>
-              {isAdmin && (
-                <Button size="sm" className="hidden md:inline-flex" onClick={() => openForm('new')}>
-                  <Plus className="h-4 w-4" /> Add Customer
-                </Button>
-              )}
+              <Button size="sm" className="hidden md:inline-flex" onClick={() => openForm('new')}>
+                <Plus className="h-4 w-4" /> Add Customer
+              </Button>
               <div className="w-full md:ml-auto md:w-72">
                 <SearchInput
                   value={search}
@@ -143,7 +135,7 @@ export default function Customers() {
             icon: Users,
             title: q ? 'No customers match your search' : 'No customers yet',
             message: q ? 'Try a different name or phone number.' : 'Add your first customer to get started.',
-            action: isAdmin && !q && (
+            action: !q && (
               <Button onClick={() => openForm('new')}>
                 <Plus className="h-4 w-4" /> Add Customer
               </Button>
@@ -160,16 +152,12 @@ export default function Customers() {
                   <Phone className="h-3.5 w-3.5" /> {row.phone}
                 </p>
               </div>
-              {isAdmin && (
-                <>
-                  <Button variant="ghost" size="icon" aria-label="Edit" onClick={(e) => { e.stopPropagation(); openForm(row) }}>
-                    <Pencil className="h-4.5 w-4.5" />
-                  </Button>
-                  <Button variant="ghost" size="icon" aria-label="Delete" onClick={(e) => { e.stopPropagation(); setDeleting(row) }}>
-                    <Trash2 className="h-4.5 w-4.5 text-danger" />
-                  </Button>
-                </>
-              )}
+              <Button variant="ghost" size="icon" aria-label="Edit" onClick={(e) => { e.stopPropagation(); openForm(row) }}>
+                <Pencil className="h-4.5 w-4.5" />
+              </Button>
+              <Button variant="ghost" size="icon" aria-label="Delete" onClick={(e) => { e.stopPropagation(); setDeleting(row) }}>
+                <Trash2 className="h-4.5 w-4.5 text-danger" />
+              </Button>
             </div>
           )}
         />

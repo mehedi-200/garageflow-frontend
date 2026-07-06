@@ -14,7 +14,6 @@ import Pagination from '../components/ui/Pagination'
 import SearchInput from '../components/ui/SearchInput'
 import StatusChip from '../components/ui/StatusChip'
 import useDebounce from '../hooks/useDebounce'
-import useAuth from '../hooks/useAuth'
 import serviceJobService, { SERVICE_TYPES, JOB_STATUSES } from '../services/serviceJobService'
 import vehicleService from '../services/vehicleService'
 import mechanicService from '../services/mechanicService'
@@ -22,7 +21,6 @@ import mechanicService from '../services/mechanicService'
 export default function Jobs() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { isAdmin } = useAuth()
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [search, setSearch] = useState('')
@@ -51,7 +49,7 @@ export default function Jobs() {
   const { data: vehiclesData } = useQuery({
     queryKey: ['vehicles', 'options'],
     queryFn: () => vehicleService.list({ per_page: 100 }),
-    enabled: isAdmin && creating,
+    enabled: creating,
   })
   const vehicleOptions = (vehiclesData?.data?.data ?? []).map((v) => ({
     value: v.id,
@@ -61,7 +59,6 @@ export default function Jobs() {
   const { data: mechanicsData } = useQuery({
     queryKey: ['mechanics', 'options'],
     queryFn: () => mechanicService.list({ per_page: 100 }),
-    enabled: isAdmin,
   })
   const mechanicOptions = (mechanicsData?.data?.data ?? []).map((m) => ({
     value: m.id,
@@ -110,22 +107,18 @@ export default function Jobs() {
       title="Service Jobs"
       bare
       actions={
-        isAdmin && (
-          <Button size="sm" onClick={openCreate}>
-            <Plus className="h-4 w-4" /> New Job
-          </Button>
-        )
+        <Button size="sm" onClick={openCreate}>
+          <Plus className="h-4 w-4" /> New Job
+        </Button>
       }
     >
       <div className="flex flex-col gap-3">
         <DataList
           toolbar={
             <>
-              {isAdmin && (
-                <Button size="sm" className="hidden md:inline-flex" onClick={openCreate}>
-                  <Plus className="h-4 w-4" /> New Job
-                </Button>
-              )}
+              <Button size="sm" className="hidden md:inline-flex" onClick={openCreate}>
+                <Plus className="h-4 w-4" /> New Job
+              </Button>
               <div className="flex w-full flex-col gap-2 md:ml-auto md:w-auto md:flex-row md:items-center">
                 <div className="md:w-44">
                   <Select
@@ -138,19 +131,17 @@ export default function Jobs() {
                     options={JOB_STATUSES}
                   />
                 </div>
-                {isAdmin && (
-                  <div className="md:w-48">
-                    <Select
-                      value={mechanicId}
-                      onChange={(e) => {
-                        setMechanicId(e.target.value)
-                        setPage(1)
-                      }}
-                      placeholder="All mechanics"
-                      options={mechanicOptions}
-                    />
-                  </div>
-                )}
+                <div className="md:w-48">
+                  <Select
+                    value={mechanicId}
+                    onChange={(e) => {
+                      setMechanicId(e.target.value)
+                      setPage(1)
+                    }}
+                    placeholder="All mechanics"
+                    options={mechanicOptions}
+                  />
+                </div>
                 <div className="md:w-64">
                   <SearchInput
                     value={search}
@@ -175,7 +166,7 @@ export default function Jobs() {
               q || status || mechanicId
                 ? 'Try different filters.'
                 : 'Create your first service job to get started.',
-            action: isAdmin && !q && !status && !mechanicId && (
+            action: !q && !status && !mechanicId && (
               <Button onClick={openCreate}>
                 <Plus className="h-4 w-4" /> New Job
               </Button>
