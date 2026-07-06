@@ -8,7 +8,6 @@ import {
   UsersRound,
 } from 'lucide-react'
 import cn from '../../utils/cn'
-import useAuth from '../../hooks/useAuth'
 
 export const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -18,15 +17,13 @@ export const NAV_ITEMS = [
   { to: '/invoices', label: 'Invoices', icon: FileText },
 ]
 
-const ADMIN_ITEMS = [{ to: '/mechanics', label: 'Mechanics', icon: UsersRound }]
+const items = [...NAV_ITEMS, { to: '/mechanics', label: 'Mechanics', icon: UsersRound }]
 
 /*
  * Desktop-only thin collapsible sidebar (CLAUDE.md UI rule 3).
  * Collapse is toggled by the hamburger next to the logo in the Header.
  */
 export default function Sidebar({ collapsed }) {
-  const { isAdmin } = useAuth()
-  const items = isAdmin ? [...NAV_ITEMS, ...ADMIN_ITEMS] : NAV_ITEMS
 
   return (
     <aside

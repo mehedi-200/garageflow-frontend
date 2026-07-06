@@ -13,14 +13,12 @@ import DataList from '../components/ui/DataList'
 import Pagination from '../components/ui/Pagination'
 import SearchInput from '../components/ui/SearchInput'
 import useDebounce from '../hooks/useDebounce'
-import useAuth from '../hooks/useAuth'
 import vehicleService from '../services/vehicleService'
 import customerService from '../services/customerService'
 
 export default function Vehicles() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { isAdmin } = useAuth()
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [search, setSearch] = useState('')
@@ -113,8 +111,7 @@ export default function Vehicles() {
     { key: 'vehicle', header: 'Vehicle', render: (row) => `${row.brand} ${row.model}` },
     { key: 'year', header: 'Year' },
     { key: 'owner', header: 'Owner', render: (row) => row.customer?.name ?? '—' },
-    ...(isAdmin
-      ? [
+    ...[
           {
             key: 'actions',
             header: '',
@@ -129,8 +126,7 @@ export default function Vehicles() {
               </span>
             ),
           },
-        ]
-      : []),
+        ],
   ]
 
   return (
@@ -138,22 +134,18 @@ export default function Vehicles() {
       title="Vehicles"
       bare
       actions={
-        isAdmin && (
-          <Button size="sm" onClick={() => openForm('new')}>
-            <Plus className="h-4 w-4" /> Add Vehicle
-          </Button>
-        )
+        <Button size="sm" onClick={() => openForm('new')}>
+          <Plus className="h-4 w-4" /> Add Vehicle
+        </Button>
       }
     >
       <div className="flex flex-col gap-3">
         <DataList
           toolbar={
             <>
-              {isAdmin && (
-                <Button size="sm" className="hidden md:inline-flex" onClick={() => openForm('new')}>
-                  <Plus className="h-4 w-4" /> Add Vehicle
-                </Button>
-              )}
+              <Button size="sm" className="hidden md:inline-flex" onClick={() => openForm('new')}>
+                <Plus className="h-4 w-4" /> Add Vehicle
+              </Button>
               <div className="flex w-full flex-col gap-2 md:ml-auto md:w-auto md:flex-row md:items-center">
                 <div className="md:w-56">
                   <Select
@@ -187,7 +179,7 @@ export default function Vehicles() {
             icon: Car,
             title: q || customerId ? 'No vehicles match your filters' : 'No vehicles yet',
             message: q || customerId ? 'Try different search or filter.' : 'Add your first vehicle to get started.',
-            action: isAdmin && !q && !customerId && (
+            action: !q && !customerId && (
               <Button onClick={() => openForm('new')}>
                 <Plus className="h-4 w-4" /> Add Vehicle
               </Button>
@@ -204,16 +196,12 @@ export default function Vehicles() {
                   {row.brand} {row.model} · {row.year} · {row.customer?.name}
                 </p>
               </div>
-              {isAdmin && (
-                <>
-                  <Button variant="ghost" size="icon" aria-label="Edit" onClick={(e) => { e.stopPropagation(); openForm(row) }}>
-                    <Pencil className="h-4.5 w-4.5" />
-                  </Button>
-                  <Button variant="ghost" size="icon" aria-label="Delete" onClick={(e) => { e.stopPropagation(); setDeleting(row) }}>
-                    <Trash2 className="h-4.5 w-4.5 text-danger" />
-                  </Button>
-                </>
-              )}
+              <Button variant="ghost" size="icon" aria-label="Edit" onClick={(e) => { e.stopPropagation(); openForm(row) }}>
+                <Pencil className="h-4.5 w-4.5" />
+              </Button>
+              <Button variant="ghost" size="icon" aria-label="Delete" onClick={(e) => { e.stopPropagation(); setDeleting(row) }}>
+                <Trash2 className="h-4.5 w-4.5 text-danger" />
+              </Button>
             </div>
           )}
         />

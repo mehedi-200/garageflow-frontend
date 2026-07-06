@@ -8,14 +8,12 @@ import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Spinner from '../components/ui/Spinner'
 import StatusChip from '../components/ui/StatusChip'
-import useAuth from '../hooks/useAuth'
 import money from '../utils/money'
 import invoiceService from '../services/invoiceService'
 
 export default function InvoiceDetail() {
   const { id } = useParams()
   const queryClient = useQueryClient()
-  const { isAdmin } = useAuth()
   const [editingLabor, setEditingLabor] = useState(false)
   const [laborValue, setLaborValue] = useState('')
   const [actionError, setActionError] = useState(null)
@@ -62,7 +60,7 @@ export default function InvoiceDetail() {
       backTo="/invoices"
       actions={
         <>
-          {isAdmin && invoice?.payment_status === 'unpaid' && (
+          {invoice?.payment_status === 'unpaid' && (
             <Button size="sm" onClick={() => payMutation.mutate()} disabled={payMutation.isPending}>
               <BadgeCheck className="h-4 w-4" /> Mark Paid
             </Button>
@@ -145,7 +143,7 @@ export default function InvoiceDetail() {
                 <td className="py-2.5 text-ink">
                   <span className="flex items-center gap-2">
                     Labor
-                    {isAdmin && invoice?.payment_status === 'unpaid' && !editingLabor && (
+                    {invoice?.payment_status === 'unpaid' && !editingLabor && (
                       <button
                         type="button"
                         aria-label="Edit labor cost"
