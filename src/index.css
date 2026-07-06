@@ -1,1 +1,106 @@
 @import "tailwindcss";
+
+/*
+ * GarageFlow design tokens — CLAUDE.md rule 4: components NEVER hardcode
+ * colors; they use these semantic utilities only (bg-canvas, bg-surface,
+ * bg-elevated, border-edge, text-ink, text-subtle, accent…).
+ */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-edge: var(--edge);
+  --color-ink: var(--ink);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+}
+
+/* ---------- DARK (default theme) ---------- */
+:root {
+  --canvas: #0e1525;
+  --surface: #1a2434;
+  --elevated: #243146;
+  --edge: #2e3d55;
+  --ink: #e7ecf4;
+  --subtle: #93a1b7;
+  --accent: #767bf5;
+  --accent-hover: #5d63f2;
+  --on-accent: #ffffff;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --info: #38bdf8;
+}
+
+/* ---------- LIGHT ---------- */
+:root.theme-light {
+  --canvas: #f3f5f9;
+  --surface: #ffffff;
+  --elevated: #eef1f6;
+  --edge: #dbe1ea;
+  --ink: #1c2636;
+  --subtle: #5f6c80;
+  --accent: #5a5ff0;
+  --accent-hover: #474dee;
+  --on-accent: #ffffff;
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #0284c7;
+}
+
+/* ---------- READING (sepia / soft contrast) ---------- */
+:root.theme-reading {
+  --canvas: #f2e9d5;
+  --surface: #faf3e3;
+  --elevated: #ece0c6;
+  --edge: #d9c9a6;
+  --ink: #42351f;
+  --subtle: #7d6c4e;
+  --accent: #6a5ae0;
+  --accent-hover: #5747d6;
+  --on-accent: #fffdf7;
+  --success: #3f7d4e;
+  --warning: #a16207;
+  --danger: #b3402e;
+  --info: #2d6a8a;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+/* Print: clean invoice only — hide app chrome, force light paper */
+@media print {
+  header, aside, footer, nav,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  :root {
+    --canvas: #ffffff;
+    --surface: #ffffff;
+    --elevated: #f3f4f6;
+    --edge: #d1d5db;
+    --ink: #111827;
+    --subtle: #4b5563;
+    --accent: #4338ca;
+    --on-accent: #ffffff;
+  }
+
+  main {
+    overflow: visible !important;
+  }
+}
+
+body {
+  @apply bg-canvas text-ink antialiased;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
