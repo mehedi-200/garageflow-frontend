@@ -191,7 +191,7 @@
 - [ ] Customer/vehicle CRUD + validation
 
 ### Part 9B — CI & data
-- [ ] GitHub Actions: run tests on push/PR + README badges
+- [x] GitHub Actions: run tests on push/PR + README badges
 - [ ] Seeders: 1 admin, 2 mechanics, ~15 customers, ~25 vehicles, ~40 jobs (all statuses), invoices
 
 ### Part 9C — Release
